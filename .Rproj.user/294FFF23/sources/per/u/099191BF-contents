@@ -1,0 +1,644 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+
+library(prob)
+library(tidyverse)
+
+```
+
+
+```{r}
+
+s_two_dice <- rolldie(2)
+
+s_two_dice
+
+```
+
+
+
+```{r}
+
+s_two_dice %>%
+  summarise(size_of_s = n())
+
+```
+
+
+```{r}
+
+e_sum_equals_seven <- s_two_dice %>%
+  dplyr::filter(X1 + X2 == 7)
+
+
+e_sum_equals_seven %>%
+  summarise(size_of_e = n())
+
+```
+
+
+# X1 and X2 are random variables
+
+```{r}
+
+s_two_dice <- s_two_dice %>%
+  mutate(total = X1 + X2)
+
+s_two_dice
+  
+
+```
+
+
+# counting rules
+
+size of sample space?
+size of event space?
+
+prob(event) = num(outcomes in the event) / num(outcomes in the sample space)
+assuming all outcomes equally likely
+
+
+```{r}
+
+prob_total_seven <- s_two_dice %>%
+  filter(X1 + X2 == 7) %>%
+  summarise(prob = n() / nrow(s_two_dice))
+
+prob_total_seven
+
+```
+
+```{r}
+
+s_die <- rolldie(1)
+
+s_die
+
+```
+
+
+```{r}
+
+s_coin <- tosscoin(1)
+
+s_coin
+
+```
+
+
+```{r}
+
+s_total <- merge(s_die, s_coin)
+
+s_total
+
+```
+
+
+# permutations
+
+permutation is an arrangment of object where order matters
+
+5243 opens the lock
+5432 doesn't open the lock
+different permutations 
+
+forgot locket code, but we know it contain 5, 4, 3, 2
+
+N = 4
+r = 4
+
+4P4 = 4! / (4-4)! = 4! / 0! = 4! / 1 = 4 * 3 * 2 * 1 = 24
+
+
+# senior employee example
+
+3 positions CEO, CTO, COO
+
+10 employees eligible to fill
+
+N = 10
+r = 3
+
+10P3 = 10! / (10-3)! = 10! / 7! = 10 * 9 * 8
+
+```{r}
+
+library(gtools)
+
+# vecor of 10 employees
+
+employees <- c("Alice", "Bob", "Carole", "David", "Elaine", "Fred", "Gabra", "Hua", "Inigo", "Hugo")
+
+seniors <- as_tibble(
+  permutations(
+    n = 10,
+    r = 3,
+    v = employees,
+    repeats.allowed = FALSE
+  )
+)
+
+seniors <- seniors %>%
+  rename(
+    CEO = V1,
+    CTO = V2,
+    COO = V3
+  )
+
+seniors
+
+
+```
+
+what is the probablity of alice being the ceo and bob being the cto if the process is random?
+
+```{r}
+
+prob <- seniors %>%
+  filter(CEO == "Alice", CTO == "Bob") %>%
+  summarise(prob = n() / nrow(seniors))
+
+prob
+
+```
+
+
+Task - 10 mins A licence plate begins with three letters from a possible set of A, B, C, D, E. How many permutations are possible if repetition of letters is:
+not allowed [Hint - how many letters are possible for first position, how many for second if one is ‘used up’, how many for third if two are ‘used up’?]
+allowed [Hint - all that changes from last answer is that letters don’t get ‘used up’]
+Try this either using pen and paper maths or R, your choice!
+
+
+N = 5
+r = 3
+
+5P3 = 5! / (5-3)! = 5! / 0! = 5! / 1 = 5 * 4 * 3 = 60
+
+
+```{r}
+
+letters <- c("A", "B", "C", "D", "E")
+
+without_rep <- permutations(n = 5, r = 3, v = letters, repeats.allowed = FALSE)
+
+nrow(without_rep)
+
+```
+
+```{r}
+
+with_rep <- permutations(n = 5, r = 3, v = letters, repeats.allowed = TRUE)
+
+nrow(with_rep)
+
+```
+
+
+# random pin
+
+```{r}
+
+inc_repeats <- permutations(n = 10, r = 4, v = 0:9, repeats.allowed = TRUE)
+exc_repeats <- permutations(n = 10, r = 4, v = 0:9, repeats.allowed = FALSE)
+
+
+```
+
+
+```{r}
+
+prob_no_repeats <- nrow(exc_repeats) / nrow(inc_repeats)
+
+prob_no_repeats
+
+```
+
+
+# combinations
+order doesn't matter
+
+example: lottery ticket
+drawn numbers: 13, 23, 4, 9, 36
+your ticket: 9, 13, 36, 4, 23
+you still win!
+
+the number of combinations is always smaller than the number of permutations
+
+5432 code                   1 combination
+2345,
+2435,
+... 24 permutations
+
+cards:
+
+52 cards, how many 5 card hands can be made
+
+N = 52
+r = 5
+
+52C5 52! / (5! x (52-5)!) = 52! / 5! / (5! x 47!) = 52 x 51 x 50 x 49 x 48 / (5 x 4 x 3 x 2 x 1) = 2,598,960
+
+```{r}
+
+cards <- cards(jokers = FALSE) %>%
+  mutate(card = str_c(rank, str_sub(suit, start = 1, end = 1))) %>%
+  pull(card)
+
+
+cards
+
+```
+
+```{r}
+
+five_card_hands <- combinations(n = 52, r = 5, v = cards, repeats.allowed = FALSE)
+
+head(five_card_hands)
+
+```
+
+```{r}
+nrow(five_card_hands)
+
+```
+
+
+```{r}
+
+num_5_card_hands <- choose(52, 5)
+
+num_5_card_hands
+
+```
+
+
+Task - 10 mins
+Given a lottery with 50
+50 numbers drawn in lots of 6
+6, how many possible winning combinations are there?
+If you buy 10
+10 tickets, each with a different set of numbers, what is your probability of winning?
+Remember, order doesn’t matter in lottery draws, and no repetition is allowed (once a numbered ball pops out the machine, it isn’t put back in).
+As above, you can use pen and paper maths or R for this, or both if you’re keen!
+
+
+```{r}
+
+lottery_combinations <- choose(50, 6)
+lottery_combinations
+
+```
+
+```{r}
+
+prob_1_ticket <- 1 / lottery_combinations
+
+prob_10_tickets <- prob_1_ticket * 10
+
+prob_10_tickets
+
+
+
+```
+
+# combining events
+
+probability of an event = number of outcomes in event / total number of outcomes, assuming each outcome is equally likely
+
+event = roll a 4, prob = 1/6
+event = not roll a 4, prob = 5/6
+
+prb(roll 4) + prob(not roll 4) = 1
+
+this is called a complimentary event
+
+
+```{r}
+
+s_four_coins <- tosscoin(4) %>%
+  mutate(row = row_number())
+
+s_four_coins
+
+```
+
+
+```{r}
+
+s_four_coins %>%
+  mutate(num_heads = rowSums(. == "H"))
+
+```
+
+```{r}
+
+s_four_coins <- s_four_coins %>%
+  pivot_longer(cols = toss1:toss4, names_to = "toss") %>%
+  group_by(row) %>% 
+  summarise(num_heads = sum(value == "H")) %>%
+  right_join(s_four_coins)
+
+```
+
+
+```{r}
+
+s_at_least_two_heads <- s_four_coins %>%
+  filter(num_heads >= 2)
+
+prob_two_heads <- nrow(s_at_least_two_heads) / nrow(s_four_coins)
+prob_two_heads
+
+
+
+```
+
+# and combinations of events
+compound events
+make_breakfast = pour_cereal + make_coffee
+
+event a: one of {1, 2, 3, 4} is rolled, prob(a) = 4/6 = 2/3
+event b: one of {3, 4, 5, 6} is rolled, prob(b) = 4/6 = 2/3
+(a n b) = {3, 4} = (a and b)
+
+prob(a and b) = 2/6 = 1/3
+
+```{r}
+
+s_four_coins <- s_four_coins %>%
+  mutate(num_tails = rowSums(. == "T"))
+
+s_four_coins
+
+```
+
+
+```{r}
+
+s_four_coins %>%
+  dpylr::filter(num_heads >= 1 & num_tails >= 1) %>%
+  summarise(prob = n() / nrow(s_four_coins))
+
+```
+
+two or more events have no outcomes? mutually exclusive (can't happen together)
+- their AND combination has probability = 0
+
+E1: at least 3 heads,
+E2: at least 2 tails
+
+```{r}
+
+s_four_coins %>%
+  dplyr::filter(num_heads >= 3 & num_tails >= 2) %>%
+  summarise(prob = n() / nrow(s_four_coins))
+
+```
+
+
+
+# or combinations
+
+back to single die:
+
+A: roll and even number{2, 4, 6} prob(A) = 3/6 = 0.5
+B: roll one of {4,5} prob(B) = 2/6 = 1/3
+
+prob(A or B) = n{2, 4, 5, 6} / 6 = 4/6 = 2/3
+
+first_die_even, second_die_is_5
+
+```{r}
+
+s_two_dice <- rolldie(2)
+s_two_dice
+
+s_two_dice %>%
+  dplyr::filter(X1 %% 2 == 0 | X2 == 5) %>%
+  summarise(prob = n() / nrow(s_two_dice))
+
+```
+
+prob(A or B) = prob(A) + prob(B) - prob(A and B)
+
+```{r}
+
+prob_first_die_even <- s_two_dice %>%
+  dplyr::filter(X1 %% 2 == 0) %>%
+  summarise(prob = n() / nrow(s_two_dice))
+
+prob_second_die_5 <- s_two_dice %>%
+  dplyr::filter(X2 == 5) %>%
+  summarise(prob = n() / nrow(s_two_dice))
+
+prob_first_die_even_AND_second_die_5 <- s_two_dice %>%
+  dplyr::filter(X1 %% 2 == 0 & X2 == 5) %>%
+  summarise(prob = n() / nrow(s_two_dice))
+
+
+prob_first_die_even_OR_second_die_5 <- prob_first_die_even + prob_second_die_5 - prob_first_die_even_AND_second_die_5
+
+prob_first_die_even_OR_second_die_5
+
+```
+
+# what is the probability of event A occurs when we know event B has occurred
+
+face cards = 12 (3 x 4)
+queens = 4
+
+= 4 / 12
+
+or 1 / 3
+
+prob(A | B) = prob(A AND B) / prob(B) (conditional probability)
+
+# conditional probability in dataframes
+
+```{r}
+
+cb <- read_csv("/Users/Natifu/codeclan_work/week_06/day_1/4_conditional_probability/data/colour_blindness.csv")
+
+```
+
+
+```{r}
+
+names(cb)
+
+```
+
+```{r}
+
+library(janitor)
+
+table <- cb %>%
+  tabyl(bio_sex, cblind)
+
+table <- table %>%
+  adorn_totals(where = c("row", "col")) %>%
+  adorn_percentages(denominator = "all") %>%
+  adorn_title()
+  
+
+table
+
+  
+
+```
+
+```{r}
+
+prob_female <- cb %>%
+  dplyr::filter(bio_sex == "female") %>%
+  summarise(prob = n() / nrow(cb))
+
+prob_female
+```
+
+```{r}
+
+prob_male <- cb %>%
+  dplyr::filter(bio_sex == "male") %>%
+  summarise(prob = n() / nrow(cb))
+
+prob_male
+
+```
+
+```{r}
+
+prob_not_cb <- cb %>%
+  dplyr::filter(cblind == FALSE) %>%
+  summarise(prob = n() / nrow(cb))
+
+prob_not_cb
+
+```
+
+
+```{r}
+
+prob_cb <- cb %>%
+  dplyr::filter(cblind == TRUE) %>%
+  summarise(prob = n() / nrow(cb))
+
+prob_cb
+
+```
+
+```{r}
+
+table
+
+
+```
+
+```{r}
+prob_female_cb <- cb %>%
+  dplyr::filter(bio_sex == "female" & cblind == TRUE) %>%
+  summarise(prob = n() / nrow(cb))
+
+prob_female_cb
+
+```
+
+```{r}
+
+prob_male_cb <- cb %>%
+  dplyr::filter(bio_sex == "male" & cblind == TRUE) %>%
+  summarise(prob = n() / nrow(cb))
+
+prob_male_cb
+
+```
+
+is being colour blind dependent on bio sex
+
+
+```{r}
+
+prob_female * prob_cb
+
+```
+
+
+```{r}
+
+prob_male * prob_cb
+
+```
+
+
+
+```{r}
+
+prob_cb_given_female <- cb %>%
+  dplyr::filter(bio_sex == "female") %>%
+  summarise(prob = sum(cblind) / n())
+
+prob_cb_given_female
+
+```
+
+
+```{r}
+
+prob_cb
+
+```
+
+```{r}
+
+prob_cb_given_male <- cb %>%
+  dplyr::filter(bio_sex == "male") %>%
+  summarise(prob = sum(cblind) / n())
+
+prob_cb_given_male
+
+```
+
+```{r}
+prob_cb
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

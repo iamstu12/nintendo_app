@@ -1,0 +1,4 @@
+"0",""
+"0","inc_repeats <- permutations(n = 10, r = 4, v = 0:9, repeats.allowed = TRUE)"
+"0","exc_repeats <- permutations(n = 10, r = 4, v = 0:9, repeats.allowed = FALSE)"
+"0",""

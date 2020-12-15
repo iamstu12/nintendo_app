@@ -1,0 +1,6 @@
+"0",""
+"0","prob_male <- cb %>%"
+"0","  dplyr::filter(bio_sex == ""male"") %>%"
+"0","  summarise(prob = n() / nrow(cb))"
+"0",""
+"0","prob_male"

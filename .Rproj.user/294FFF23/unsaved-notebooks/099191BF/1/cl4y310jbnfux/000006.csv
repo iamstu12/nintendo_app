@@ -1,0 +1,6 @@
+"0",""
+"0","prob <- seniors %>%"
+"0","  filter(CEO == ""Alice"", CTO == ""Bob"") %>%"
+"0","  summarise(prob = n() / nrow(seniors))"
+"2","Error in match.arg(method) : object 'CTO' not found
+"

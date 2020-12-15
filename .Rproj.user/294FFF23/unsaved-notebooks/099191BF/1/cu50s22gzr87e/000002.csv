@@ -1,0 +1,10 @@
+"0",""
+"0","s_four_coins <- s_four_coins %>%"
+"0","  pivot_longer(cols = toss1:toss4, names_to = ""toss"") %>%"
+"0","  group_by(row) %>% "
+"0","  summarise(num_heads = sum(value == ""H"")) %>%"
+"0","  right_join(s_four_coins)"
+"2","`summarise()` ungrouping output (override with `.groups` argument)
+"
+"2","Joining, by = ""row""
+"

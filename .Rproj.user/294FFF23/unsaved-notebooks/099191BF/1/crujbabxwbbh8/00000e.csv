@@ -1,0 +1,7 @@
+"0",""
+"0","e_sum_equals_seven <- s_two_dice %>%"
+"0","  dplyr::filter(X1 + X2 == 7)"
+"0",""
+"0",""
+"0","e_sum_equals_seven %>%"
+"0","  summarise(size_of_e = n())"

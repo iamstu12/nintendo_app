@@ -1,0 +1,5 @@
+"0",""
+"0","s_four_coins <- s_four_coins %>%"
+"0","  mutate(num_tails = rowSums(. == ""T""))"
+"0",""
+"0","s_four_coins"

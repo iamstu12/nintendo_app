@@ -1,0 +1,8 @@
+"0",""
+"0","prob_no_repeats <- nrow(exc_repeats) / nrow(inc_repeats)"
+"0",""
+"0","prob_no_repeats"
+"1","[1]"
+"1"," 0.504"
+"1","
+"

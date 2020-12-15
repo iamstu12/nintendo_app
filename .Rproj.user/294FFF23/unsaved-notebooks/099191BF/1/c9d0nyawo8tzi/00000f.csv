@@ -1,0 +1,5 @@
+"0",""
+"0","s_two_dice <- s_two_dice %>%"
+"0","  mutate(total = X1 + X2)"
+"0",""
+"0","s_two_dice"

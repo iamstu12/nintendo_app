@@ -1,0 +1,6 @@
+"0",""
+"0","s_four_coins %>%"
+"0","  dpylr::filter(num_heads >= 1 & num_tails >= 1) %>%"
+"0","  summarise(prob = n() / nrow(s_four_coins))"
+"2","Error in loadNamespace(name) : there is no package called ‘dpylr’
+"

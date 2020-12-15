@@ -1,0 +1,6 @@
+"0",""
+"0","prob_cb <- cb %>%"
+"0","  dplyr::filter(cblind == TRUE) %>%"
+"0","  summarise(prob = n() / nrow(cb))"
+"0",""
+"0","prob_cb"

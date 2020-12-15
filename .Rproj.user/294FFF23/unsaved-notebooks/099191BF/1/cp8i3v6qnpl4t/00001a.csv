@@ -1,0 +1,4 @@
+"0",""
+"0","s_two_dice %>%"
+"0","  dplyr::filter(X1 %% 2 == 0 | X2 == 5) %>%"
+"0","  summarise(prob = n() / nrow(s_two_dice))"

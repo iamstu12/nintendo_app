@@ -1,0 +1,3 @@
+"0",""
+"0","s_four_coins %>%"
+"0","  mutate(num_heads = rowSums(. == ""H""))"

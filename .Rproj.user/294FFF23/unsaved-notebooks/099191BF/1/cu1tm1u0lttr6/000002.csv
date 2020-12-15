@@ -1,0 +1,8 @@
+"0",""
+"0","with_rep <- permutations(n = 5, r = 3, v = letters, repeats.allowed = TRUE)"
+"0",""
+"0","nrow(with_rep)"
+"1","[1]"
+"1"," 125"
+"1","
+"

@@ -1,0 +1,5 @@
+"0",""
+"0","s_at_least_two_heads <- s_four_coins %>%"
+"0","  filter(num_heads >= 2)"
+"2","Error in filter(., num_heads >= 2) : object 'num_heads' not found
+"

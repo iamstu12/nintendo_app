@@ -1,0 +1,8 @@
+"0",""
+"0","s_four_coins %>%"
+"0","  dplyr::filter(num_heads >= 3 & num_tails >= 2) %>%"
+"0","  summarise(prob = n() / nrow(s_four_coins))"
+"2","Error: Problem with `filter()` input `..1`.
+[31mx[39m object 'num_tails' not found
+[34mℹ[39m Input `..1` is `num_heads >= 3 & num_tails >= 2`.
+"

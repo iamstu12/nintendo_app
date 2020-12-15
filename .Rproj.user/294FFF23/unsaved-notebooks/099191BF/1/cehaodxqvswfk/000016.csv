@@ -1,0 +1,6 @@
+"0",""
+"0","prob_total_seven <- s_two_dice %>%"
+"0","  filter(X1 + X2 == 7) %>%"
+"0","  summarise(prob = n() / nrow(s_two_dice))"
+"2","Error in filter(., X1 + X2 == 7) : object 'X1' not found
+"
