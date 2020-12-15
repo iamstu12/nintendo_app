@@ -14,6 +14,8 @@ Probably my favourite part of the app is that when you click on the 'here we go'
 
 ![](images/image_2.png)
 
+![](images/image_3.png)
+
 
 
   
